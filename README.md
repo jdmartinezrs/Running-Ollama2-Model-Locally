@@ -2,6 +2,10 @@
 
 Este proyecto realiza una solicitud HTTP `POST` a un servidor local en la URL `http://localhost:11434/api/chat`, enviando un payload que incluye un modelo llamado "llama2" y un mensaje con el contenido "who invented hiphop music?". Luego procesa la respuesta del servidor, que probablemente contiene una serie de fragmentos JSON, y los une en un único mensaje que se imprime al final.
 
+Memory requirements
+7b models generally require at least 8GB of RAM
+
+
 ## Detalles del Código
 
 1. **Payload**: El payload es un diccionario de Python que contiene dos claves:
@@ -99,5 +103,46 @@ Kurtis Blow: Kurtis Blow is a hip-hop artist and producer who was one of the fir
 Run-D.M.C.: Run-D.M.C. is a hip-hop group from Queens, New York, known for their innovative use of sampling and groundbreaking music videos. They are credited with helping to shape the genre's development and evolution. Their contributions helped shape the genre into what it is today, and their legacy continues to inspire new generations of hip-hop artists.
 ```
 
-
 ![ollama](https://i.pinimg.com/1200x/50/ca/c8/50cac8aec3b153c6279458797b9aa938.jpg)
+
+## Proyecto aplicación
+
+Chat con API de Modelo de Lenguaje Este proyecto crea una interfaz de chat interactiva donde los usuarios pueden escribir mensajes y obtener respuestas generadas por un modelo de lenguaje. Utilizando Streamlit, esta aplicación permite comunicarte con el modelo de forma sencilla y eficaz.
+
+```
+Es recomendable crear un entorno virtual para evitar conflictos con otras dependencias de Python. Puedes hacerlo de la siguiente manera:
+
+python -m venv venv
+```
+
+Una vez creado el entorno, actívalo con el siguiente comando:
+
+- En Windows:
+
+  ```
+  venv\Scripts\activate
+  ```
+
+## 1. Instalar los requisitos
+
+Instala las dependencias necesarias utilizando el archivo `requirements.txt`. Para ello, ejecuta el siguiente comando:
+
+```
+pip install -r requirements.txt
+```
+
+## 2. Ejecutar la aplicación
+
+Una vez instaladas las dependencias, puedes ejecutar la aplicación con el siguiente comando:
+
+```
+streamlit run app.py
+```
+
+Esto abrirá la aplicación en tu navegador predeterminado.
+
+## 3. Imagen de referencia
+
+Aquí puedes ver una imagen relacionada con el proyecto:
+
+![llama2 chat](https://i.pinimg.com/1200x/29/db/93/29db93cf3d9bd177519c591a87115afa.jpg)
