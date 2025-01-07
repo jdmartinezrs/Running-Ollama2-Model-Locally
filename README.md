@@ -1,92 +1,79 @@
+# Guía de Ejecución del Modelo Local Llama2 y Generación de Imágenes con Phi + Stable Diffusion
 
-1. Es documentar en un readme como correr un modelo en local, con sus configuraciones y un ejemplo
-
-# 1.Ejecución del Modelo Llama2 en un Servidor Local
-
-Este proyecto realiza una solicitud HTTP `POST` a un servidor local en la URL `http://localhost:11434/api/chat`, enviando un payload que incluye un modelo llamado "llama2" y un mensaje con el contenido "who invented hiphop music?". Luego procesa la respuesta del servidor, que probablemente contiene una serie de fragmentos JSON, y los une en un único mensaje que se imprime al final.
-
-Memory requirements
-7b models generally require at least 8GB of RAM
-
-
-## Detalles del Código
-
-1. **Payload**: El payload es un diccionario de Python que contiene dos claves:
-   - `"model"`: Un modelo que se utilizará para procesar la consulta (en este caso, `"llama2"`).
-   - `"messages"`: Una lista con un solo mensaje que contiene un rol de usuario y una consulta.
-2. **Solicitud POST**: Se usa el módulo `requests` para enviar una solicitud `POST` al servidor local. Los datos se envían en formato JSON (mediante el parámetro `json=payload`).
-3. **Procesamiento de la respuesta**: La respuesta del servidor se recibe en `response.text`, que se divide en líneas. Cada línea se intenta convertir en un fragmento JSON. Si es válido, se extrae el contenido del mensaje y se concatena con el contenido de otros fragmentos, formando la respuesta final.
+Este documento te guiará en el proceso de ejecutar un modelo Llama2 localmente en un servidor, interactuar con él a través de una API y crear imágenes utilizando una combinación de modelos de lenguaje y generación visual.
 
 ------
 
-## Requisitos
+## **1. Ejecución del Modelo Llama2 Local**
 
-Asegúrate de tener **Python** y **pip** (el gestor de paquetes de Python) instalados en tu sistema.
+Este proyecto realiza una solicitud HTTP `POST` a un servidor local en la URL `http://localhost:11434/api/chat`, enviando un modelo `llama2` para procesar la consulta "¿Who invented hip-hop music?" y luego muestra la respuesta procesada.
 
-------
+### Requisitos del Sistema
 
-## 1. Instalar Dependencias Necesarias
+- **Memoria RAM**: Se recomienda al menos **8 GB de RAM** para modelos de 7B.
+- **Python**: Versión 3.6 o superior.
 
-El código utiliza la librería `requests` para enviar una solicitud HTTP y procesar la respuesta. Por lo tanto, **necesitarás tener esta librería instalada**.
+### Configuración del Entorno
 
-Para instalar `requests`, ejecuta el siguiente comando:
+Se recomienda crear un entorno virtual para evitar conflictos con otras dependencias. Para hacerlo, sigue estos pasos:
 
-```python
-pip install requests
+1. **Crear un entorno virtual**:
+
+   ```
+   python -m venv venv
+   ```
+
+2. **Activar el entorno virtual**:
+
+   - En **Windows**:
+
+     ```
+     venv\Scripts\activate
+     ```
+
+   - En **Linux/macOS**:
+
+     ```
+     source venv/bin/activate
+     ```
+
+### Instalación de Dependencias
+
+Para instalar las dependencias necesarias, ejecuta el siguiente comando:
+
+```
+pip install -r requirements.txt
 ```
 
-------
+### Ejecutando el Servidor Local
 
-## 2. Asegúrate de Tener el Servidor Local Corriendo
+1. **Verifica que tu servidor local está corriendo**:
 
-El código realiza una solicitud `POST` a la URL `http://localhost:11434/api/chat`. Esto significa que necesitas tener un servidor corriendo localmente en ese puerto. Este servidor es el que proporciona el modelo `llama2` o un servicio que procesa la solicitud y genera la respuesta.
+   Asegúrate de tener un servidor en funcionamiento en el puerto `11434`. Puedes probarlo con el siguiente comando:
 
-### ¿Cómo Asegurar que el Servidor Está Corriendo?
+   ```
+   curl http://localhost:11434/
+   ```
 
-1. Si tienes configurado un **servidor local** que ejecuta el modelo `llama2`, asegúrate de que esté en funcionamiento en el puerto `11434`. Esto puede ser un servidor basado en Flask, FastAPI o alguna implementación personalizada que hayas hecho. Si el servidor no está corriendo, tu código no podrá hacer la solicitud correctamente.
-2. Para **verificar si el servidor está corriendo** en ese puerto, puedes intentar ejecutar el siguiente comando:
+   Si el servidor está activo, recibirás una respuesta, como un mensaje de bienvenida:"Ollama is running"
 
-```python
-curl http://localhost:11434/
+2. **Arrancar el servidor que aloja el modelo `llama2`**:
+
+   ```
+   ollama pull llama2
+   ```
+
+### Ejecución del Script
+
+Una vez que el servidor esté en marcha, puedes ejecutar el script de Python para hacer la solicitud y obtener la respuesta:
+
 ```
-
-Si el servidor está activo, debería devolverte una respuesta, como un mensaje de bienvenida o algún tipo de información sobre el servidor. Si no hay respuesta, significa que el servidor no está corriendo y deberías iniciar el servicio que maneja las solicitudes del modelo `llama2`.
-
-------
-
-## 3. Modelo `Llama2` en el Servidor Local
-
-El modelo `llama2` debe estar disponible en el servidor local. Asegúrate de que el servidor que estás ejecutando tenga acceso al modelo `llama2` y esté configurado correctamente para responder a las solicitudes en el endpoint `/api/chat`.
-
-Dependiendo de cómo hayas configurado tu servidor, puede ser necesario que descargues el modelo, lo cargues en memoria y lo sirvas desde allí.
-
-------
-
-## 4. Comandos para la Configuración del Servidor Local
-
-```python
-`ollama pull llama2`
-```
-
-Este comando **no es necesario** para el código Python que has proporcionado, a menos que estés usando una herramienta específica para gestionar el modelo `llama2` y quieras descargarlo o asegurarte de que esté disponible localmente para el servidor.
-
-------
-
-## Ejecutar el Código
-
-Una vez que hayas asegurado que el servidor esté corriendo y configurado correctamente, puedes ejecutar el script Python.
-
-Para ejecutar el script, usa el siguiente comando:
-
-```python
 python localollama2.py
 ```
 
-Este comando enviará la solicitud al servidor y procesará la respuesta. El resultado final se imprimirá en la terminal.
+Esto enviará una solicitud al servidor y te devolverá una respuesta en tu terminal.
 
-
-
-**RETORNA**
+**Ejemplo de respuesta obtenida**:
 
 ```
 Hip hop music originated in the Bronx, New York City in the 1970s and early 1980s. The genre was created by African American and Latino youth who were living in poverty and facing social and economic challenges. The origins of hip hop can be traced back to four main elements: DJing, MCing (rapping), breaking (dancing), and graffiti art.
@@ -102,109 +89,77 @@ Grandmaster Flash: Grandmaster Flash is a pioneering DJ and producer who is know
 The Sugarhill Gang: The Sugarhill Gang is a hip-hop group from Newark, New Jersey, credited with creating the first hip-hop single, "Rapper's Delight," in 1979.
 
 Kurtis Blow: Kurtis Blow is a hip-hop artist and producer who was one of the first to record and release hip-hop music. His debut album, "Kurtis Blow," was released in 1980 and is considered one of the earliest hip-hop albums.
-
-Run-D.M.C.: Run-D.M.C. is a hip-hop group from Queens, New York, known for their innovative use of sampling and groundbreaking music videos. They are credited with helping to shape the genre's development and evolution. Their contributions helped shape the genre into what it is today, and their legacy continues to inspire new generations of hip-hop artists.
 ```
 
-![ollama](https://i.pinimg.com/1200x/50/ca/c8/50cac8aec3b153c6279458797b9aa938.jpg)
+------
 
 
-2. Es usando la API crear como una interfaz de chat donde pueda escribir a un modelo y este te responda.
 
-## 2.Proyecto aplicación
+## **2. Aplicación de Chat con la API del Modelo de Lenguaje**
 
-Chat con API de Modelo de Lenguaje Este proyecto crea una interfaz de chat interactiva donde los usuarios pueden escribir mensajes y obtener respuestas generadas por un modelo de lenguaje. Utilizando Streamlit, esta aplicación permite comunicarte con el modelo de forma sencilla y eficaz.
+Este proyecto utiliza **Streamlit** para crear una interfaz de chat donde puedes interactuar con el modelo de lenguaje y obtener respuestas en tiempo real.
 
-```
-Es recomendable crear un entorno virtual para evitar conflictos con otras dependencias de Python. Puedes hacerlo de la siguiente manera:
+### Ejecutar la Aplicación de Chat
 
-python -m venv venv
-```
+Una vez que las dependencias estén instaladas, ejecuta la aplicación con el siguiente comando:
 
-Una vez creado el entorno, actívalo con el siguiente comando:
-
-- En Windows:
-
-  ```
-  venv\Scripts\activate
-  ```
-
-## 1. Instalar los requisitos
-
-Instala las dependencias necesarias utilizando el archivo `requirements.txt`. Para ello, ejecuta el siguiente comando:
-
-```
-pip install -r requirements.txt
-```
-
-## 2. Ejecutar la aplicación
-
-Una vez instaladas las dependencias, puedes ejecutar la aplicación con el siguiente comando:
-
-```
+```python
 streamlit run app.py
 ```
 
-Esto abrirá la aplicación en tu navegador predeterminado.
-
-## 3. Imagen de referencia
-
-Aquí puedes ver una imagen relacionada con el proyecto:
+Esto abrirá la aplicación en tu navegador predeterminado y podrás comenzar a interactuar con el modelo de lenguaje.
 
 ![llama2 chat](https://i.pinimg.com/1200x/29/db/93/29db93cf3d9bd177519c591a87115afa.jpg)
 
 
-3. Usando múltiples moldes (recomendamos la API) comunicarlos entre ellos, por ejemplo que un LLM genere el prompt para un modelo de generación de imágenes.
 
+------
 
-Uso en Google Colab
+## **3. Generación de Imágenes Usando Modelos de Lenguaje y Estilo Visual**
 
-Este código está diseñado para ejecutarse de manera eficiente en Google Colab, aprovechando el uso de GPU. Sigue los siguientes pasos para ejecutar el código correctamente:
+\- Se utiliza el modelo `microsoft/Phi-3.5-mini-instruct` para generar un texto mejorado (prompt) a partir de un texto inicial. Esto se hace con el fin de crear un prompt más detallado y efectivo para la generación de imágenes.
 
-**Generación de Prompt Mejorado (con Phi):**
+***\*Generación de Imágenes (con Stable Diffusion):\****
 
-- Se utiliza el modelo `microsoft/Phi-3.5-mini-instruct` para generar un texto mejorado (prompt) a partir de un texto inicial. Esto se hace con el fin de crear un prompt más detallado y efectivo para la generación de imágenes.
+\- Una vez que se tiene el prompt generado, este se utiliza para crear una imagen utilizando el modelo de ***\*Stable Diffusion\**** (versión 1.5).
 
-**Generación de Imágenes (con Stable Diffusion):**
+### Requisitos
 
-- Una vez que se tiene el prompt generado, este se utiliza para crear una imagen utilizando el modelo de **Stable Diffusion** (versión 1.5).
-
-- **`transformers`**: Carga y usa modelos preentrenados de NLP (como Phi).
-- **`diffusers`**: Genera imágenes a partir de texto usando modelos de difusión (Stable Diffusion).
-- **`torch`**: Utiliza PyTorch para operaciones de aprendizaje profundo y acceso a GPU.
-- **`Pillow`**: Manipula y guarda imágenes.
-- **`bitsandbytes`**: Optimiza el uso de memoria al cargar modelos grandes en 8 bits.
-- **`accelerate`**: Facilita la ejecución eficiente en múltiples dispositivos (GPU, CPU).
+Para ejecutar este código en **Google Colab**, necesitarás las siguientes librerías:
 
 ```python
 !pip install transformers diffusers torch Pillow bitsandbytes accelerate
 ```
 
-1. **Carga y configura el modelo Phi** de Microsoft para generar texto mejorado (prompt) usando el modelo `AutoModelForCausalLM` y `AutoTokenizer`.
-2. **Configura Stable Diffusion** para generar imágenes a partir de un texto dado usando la clase `StableDiffusionPipeline`.
-3. Métodos
-   - `generate_prompt`: Genera un prompt mejorado a partir de un texto de entrada utilizando Phi.
-   - `generate_image`: Usa el prompt para generar una imagen con Stable Diffusion.
+**Obtén tu token de Hugging Face**
 
-Utiliza GPU si está disponible.
+Para usar modelos de Hugging Face, necesitarás un **HF_TOKEN**. Aquí te mostramos cómo obtenerlo:
 
+- Ve a [Hugging Face](https://huggingface.co/).
+- Regístrate o inicia sesión en tu cuenta.
+- Dirígete a **Settings** (Configuraciones) > **Access Tokens**.
+- Crea un nuevo token con los permisos que necesites (por ejemplo, "read").
+- Guarda este token para usarlo en tu código
 
+### Código para Generación de Prompts e Imágenes
+
+A continuación se presenta el código completo para la creación de una imagen a partir de un texto generado por el modelo de lenguaje Phi:
 
 ```python
-import torch
+pythonCopiar códigoimport torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-from diffusers import StableDiffusionPipeline  # Asegúrate de que esta línea esté incluida
+from diffusers import StableDiffusionPipeline
 from PIL import Image
 
 class ImageGenerationPipeline:
     def __init__(self):
-        # Phi model setup
+        # Configuración del modelo Phi
         quantization_config = BitsAndBytesConfig(
             load_in_8bit=True,
             llm_int8_enable_fp32_cpu_offload=True
         )
 
-        # Load Phi tokenizer and model
+        # Cargar el modelo y tokenizer Phi
         self.phi_tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3.5-mini-instruct")
         self.phi_model = AutoModelForCausalLM.from_pretrained(
             "microsoft/Phi-3.5-mini-instruct",
@@ -213,14 +168,14 @@ class ImageGenerationPipeline:
             torch_dtype=torch.float16
         )
 
-        # Stable Diffusion setup
+        # Configuración de Stable Diffusion
         self.sd_pipeline = StableDiffusionPipeline.from_pretrained(
             "runwayml/stable-diffusion-v1-5",
             torch_dtype=torch.float16
         ).to("cuda")  # Usa "cpu" si no tienes GPU
 
     def generate_prompt(self, input_text, max_length=100):
-        # Generate enhanced prompt using Phi model
+        # Generar un prompt mejorado usando el modelo Phi
         inputs = self.phi_tokenizer(input_text, return_tensors="pt").to(self.phi_model.device)
         outputs = self.phi_model.generate(
             **inputs,
@@ -233,82 +188,71 @@ class ImageGenerationPipeline:
         return self.phi_tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     def generate_image(self, prompt):
-        # Generate image using Stable Diffusion
+        # Generar la imagen usando Stable Diffusion
         image = self.sd_pipeline(prompt).images[0]
         return image
-
 ```
 
-**Crea una instancia de `ImageGenerationPipeline`**: Se inicializa el pipeline que contiene los modelos Phi y Stable Diffusion.
+### Ejecución del Pipeline
 
-**Define un texto de entrada (`input_text`)**: Se especifica el texto base que se usará para generar un prompt mejorado. En este caso, el texto es "Give me a prompt to create an image of a magic beach."
+1. **Generar un prompt mejorado**:
 
-**Genera un prompt mejorado (`enhanced_prompt`)**: Usando el método `generate_prompt`, el pipeline genera un prompt más detallado y descriptivo a partir del texto base dado.
+   Usamos el modelo Phi para mejorar el prompt a partir de un texto inicial:  
 
-**Muestra el prompt generado**: Imprime el prompt mejorado que fue generado por el modelo Phi.
+   "Give me a prompt to create an image of a magic beach."
 
-```python
-# Crear una instancia del pipeline
-pipeline = ImageGenerationPipeline()
+   ```python
+   pythonCopiar códigoinput_text = "Give me a prompt to create an image of a magic beach."
+   pipeline = ImageGenerationPipeline()
+   enhanced_prompt = pipeline.generate_prompt(input_text)
+   print(f"Prompt Generado: {enhanced_prompt}")
+   ```
 
-# Define el texto original para generar el prompt
-input_text = "Give me a prompt to create an image of a magic beach."
+   **Prompt mejorado**:
 
-# Generar el prompt mejorado
-enhanced_prompt = pipeline.generate_prompt(input_text)
+   ```
+   \#  Answer Prompt for Image Generation: Create a captivating digital artwork that 
+   depicts a magical beach scene. The beach is bathed in ethereal light, emanating from a
+   setting sun that casts a warm golden hue across the scene. The sand sparkles with a touch
+   of magic, shimmering with tiny, iridescent crystals that twink
+   ```
 
-# Mostrar el prompt generado
-print(f"Prompt Generado: {enhanced_prompt}")
+   
+
+2. **Generar la imagen**:
+
+   Utilizando el prompt mejorado, generamos una imagen con **Stable Diffusion**:
+
+   ```
+   pythonCopiar códigoimage = pipeline.generate_image(enhanced_prompt)
+   image.show()
+   
+   # Guardar la imagen en la carpeta de descargas
+   image_path = './Descargas/beach.png'
+   image.save(image_path)
+   print(f"Imagen guardada en: {image_path}")
+   ```
+
+### Descargar la Imagen (Google Colab)
+
+Si estás trabajando en **Google Colab**, puedes descargar la imagen generada usando:
+
+```
+pythonCopiar códigofrom google.colab import files
+files.download(image_path)  # Esto descargará la imagen a tu computadora
 ```
 
-El prompt generado en este caso es:
+**Imágenes de referencia**:
 
-```
-\#  Answer Prompt for Image Generation: Create a captivating digital artwork that depicts a magical beach scene. The beach is bathed in ethereal light, emanating from a setting sun that casts a warm golden hue across the scene. The sand sparkles with a touch of magic, shimmering with tiny, iridescent crystals that twink
-```
+**Imágen generada **:
 
-**Genera la imagen**: Utiliza el **prompt mejorado** (`enhanced_prompt`) para generar una imagen usando el método `generate_image` del pipeline.
-
-**Muestra la ruta de guardado**: Imprime la ruta en la que la imagen ha sido guardada, para que el usuario sepa dónde encontrarla en su entorno.
-
-```python
-import os  # Import the os module
-
-# Usamos el prompt generado para crear la imagen
-image = pipeline.generate_image(enhanced_prompt)
+![Beach image](https://i.pinimg.com/1200x/80/27/74/802774462e3cc682e57625718d6e38ad.jpg)
 
 
-image.show()
-
-download_folder = './Descargas'
-os.makedirs(download_folder, exist_ok=True)
 
 
-image_path = os.path.join(download_folder, "beach.png")
-image.save(image_path)
 
-# Mostrar la ruta donde se guardó la imagen
-print(f"Imagen guardada en: {image_path}")
-```
 
-**Importa la librería `files` de Google Colab**: La librería `files` se utiliza para interactuar con archivos dentro de Google Colab.
+**BONUS**:
 
-**Descarga la imagen**: `files.download(image_path)` inicia la descarga del archivo ubicado en `image_path`, que es la ruta del archivo de imagen guardado en el directorio `Descargas` (por ejemplo, `beach.png`).
-
-- Esto hará que el navegador del usuario descargue el archivo directamente a la carpeta predeterminada de descargas de su computadora.
-
-  ```python
-  from google.colab import files
-  
-  # Descargar la imagen a tu computadora
-  files.download(image_path)  # Esto descargará la imagen a tu computadora.
-  ```
-
-  
-
-  **##  Imagen de referencia**
-
-  Aquí puedes ver la imágen generada, basada en el prompt:
-
-  
-  ![Beach image](https://i.pinimg.com/1200x/80/27/74/802774462e3cc682e57625718d6e38ad.jpg)
+[Pose estimation](https://youtu.be/NAwsCyCkQbA?si=DkTBEBpD6Oye8ovc)
