@@ -202,7 +202,7 @@ class ImageGenerationPipeline:
    "Give me a prompt to create an image of a magic beach."
 
    ```python
-   pythonCopiar códigoinput_text = "Give me a prompt to create an image of a magic beach."
+   input_text = "Give me a prompt to create an image of a magic beach."
    pipeline = ImageGenerationPipeline()
    enhanced_prompt = pipeline.generate_prompt(input_text)
    print(f"Prompt Generado: {enhanced_prompt}")
@@ -224,7 +224,7 @@ class ImageGenerationPipeline:
    Utilizando el prompt mejorado, generamos una imagen con **Stable Diffusion**:
 
    ```
-   pythonCopiar códigoimage = pipeline.generate_image(enhanced_prompt)
+   image = pipeline.generate_image(enhanced_prompt)
    image.show()
    
    # Guardar la imagen en la carpeta de descargas
@@ -238,7 +238,7 @@ class ImageGenerationPipeline:
 Si estás trabajando en **Google Colab**, puedes descargar la imagen generada usando:
 
 ```
-pythonCopiar códigofrom google.colab import files
+from google.colab import files
 files.download(image_path)  # Esto descargará la imagen a tu computadora
 ```
 
